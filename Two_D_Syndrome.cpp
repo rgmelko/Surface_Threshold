@@ -18,6 +18,7 @@ int rnd_int(int a, int b)
 //-----------------------------------
 
 #include "hypercube.h"
+#include "syndrome.h"
 #include "error_chain.h"
 
 
@@ -35,6 +36,9 @@ int main ( int argc, char *argv[] )
    Error_Chain Ep(2*square.N_); //The error E'
    Ep.initialize_random(0.2,345400);
    Ep.print();
+
+   Syndrome S(square.N_);
+   S.print();
 
    return 0;
 }

@@ -20,7 +20,6 @@ class Error_Chain
     public:
         int N1; //total number of one-cells (edges)
 
-        //the lattice is a vector of vectors: no double counting
         vector<int> error;
 
         //public functions
@@ -33,7 +32,6 @@ class Error_Chain
 };
 
 //constructor 1
-//takes the total number of lattice sites
 Error_Chain::Error_Chain(){
 
     error.clear(); 
@@ -46,7 +44,7 @@ Error_Chain::Error_Chain(int N){
 
     N1 = N;
 
-    error.resize(N1,0); //assign every error as 1
+    error.resize(N1,0); //assign every error as 0
 
 }
 
@@ -55,7 +53,7 @@ void Error_Chain::resize(int N){
 
     N1 = N;
 
-    error.resize(N1,0); //assign every error as 1
+    error.resize(N1,0); //assign every error as 0
 
 }
 
