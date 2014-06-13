@@ -1,7 +1,7 @@
 #ifndef ERROR_CHAIN_H
 #define ERROR_CHAIN_H
 
-// a class that contains the errors 
+// a class that contains the error chain
 
 #include <vector>
 #include <iostream>
@@ -11,10 +11,6 @@ boost::random::mt19937 egen; //Global random number generator for this class
 double rnd_coin(){  //real # including 0 and excluding 1
     boost::random::uniform_real_distribution <> coin(0, 1); 
     return coin(egen);
-}
-int rnd_edge(int a, int b) { 
-    boost::random::uniform_int_distribution <> dist(a, b);
-    return dist(egen); 
 }
 
 using namespace std;
