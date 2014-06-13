@@ -6,6 +6,17 @@
 #include <vector>
 #include <iostream>
 
+#include <boost/random.hpp>
+boost::random::mt19937 egen; //Global random number generator for this class
+double rnd_coin(){  //real # including 0 and excluding 1
+    boost::random::uniform_real_distribution <> coin(0, 1); 
+    return coin(egen);
+}
+int rnd_edge(int a, int b) { 
+    boost::random::uniform_int_distribution <> dist(a, b);
+    return dist(egen); 
+}
+
 using namespace std;
 
 class Error_Chain
@@ -20,9 +31,8 @@ class Error_Chain
         Error_Chain(int N);
         Error_Chain();
         void resize(int N);
-        //void flip(int index);
         void print();
-        void initialize_random();
+        void initialize_random(const double p, const int seed);
 
 };
 
@@ -53,20 +63,17 @@ void Error_Chain::resize(int N){
 
 }
 
-void Error_Chain::initialize_random(){
+//This function initializes the random error configuration, given
+//a probability for error p, and a seed
+void Error_Chain::initialize_random(const double p, const int seed){
+
+    egen.seed(seed);
 
     for (int i = 0; i<error.size(); i++){
-		continue;
+        if (rnd_coin() < p) error[i] = 1;
     }
 
 }//initialize_random;
-
-////a single-error flip
-//void Error_Chain::flip(int index){
-//
-//    error.at(index) *= -1;
-//
-//}//flip
 
 
 //a print function

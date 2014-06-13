@@ -24,11 +24,12 @@ int rnd_int(int a, int b)
 int main ( int argc, char *argv[] )
 {
 
-
    HyperCube square(4,2);
    square.print();
 
    Error_Chain E(2*square.N_); //The error E
+   E.print();
+   E.initialize_random(0.01,345451);
    E.print();
 
    return 0;
