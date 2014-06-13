@@ -7,7 +7,6 @@ using namespace std;
 
 #include <boost/multi_array.hpp>
 
-
 //-----GLOBAL RANDOM NUMBER GENERATOR
 #include <boost/random.hpp>
 boost::random::mt19937 gen; //instantize a random numbrer generator
@@ -17,14 +16,20 @@ int rnd_int(int a, int b)
 { boost::random::uniform_int_distribution <> dist(a, b);
   return dist(gen); }
 
+#include "hypercube.h"
+#include "error_chain.h"
+
+
 //----main
 int main ( int argc, char *argv[] )
 {
 
-    for (int i=0; i<1000; i++){
-       cout<<rnd_int(23,25)<<" ";
-       cout<<metrop(gen)<<endl;
-    }
+
+   HyperCube square(4,2);
+   square.print();
+
+   Error_Chain E(2*square.N_); //The error E
+   E.print();
 
    return 0;
 }

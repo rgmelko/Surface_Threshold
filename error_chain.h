@@ -22,7 +22,7 @@ class Error_Chain
         void resize(int N);
         //void flip(int index);
         void print();
-        //void randomize();
+        void initialize_random();
 
 };
 
@@ -53,19 +53,13 @@ void Error_Chain::resize(int N){
 
 }
 
-//void Error_Chain::randomize(){
-//
-//    MTRand irand(129345); //random number 
-//
-//    int ising_error;
-//    for (int i = 0; i<error.size(); i++){
-//        ising_error = 2*irand.randInt(1)-1;
-//        //cout<<ising_error<<" ";
-//        error.at(i) = ising_error;
-//    }
-//
-//
-//}//randomize
+void Error_Chain::initialize_random(){
+
+    for (int i = 0; i<error.size(); i++){
+		continue;
+    }
+
+}//initialize_random;
 
 ////a single-error flip
 //void Error_Chain::flip(int index){
