@@ -38,6 +38,7 @@ int main ( int argc, char *argv[] )
    Ep.print();
 
    Syndrome S(square.N_);
+   S.Find_Syndrome(E);
    S.print();
 
    return 0;

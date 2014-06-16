@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 
+#include "error_chain.h"
+
 using namespace std;
 
 class Syndrome
@@ -19,6 +21,7 @@ class Syndrome
         Syndrome(int N);
         void print();
 
+		void Find_Syndrome(const Error_Chain & E);
 };
 
 //constructor 
@@ -41,5 +44,12 @@ void Syndrome::print(){
     cout<<endl;
 
 }//print
+
+//This function takes an error configuration and find the Syndrome
+void Syndrome::Find_Syndrome(const Error_Chain & E){
+
+	syndrome[1] = 1;
+
+}//Find_Syndrome
 
 #endif
