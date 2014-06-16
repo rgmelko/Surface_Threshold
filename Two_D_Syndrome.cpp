@@ -28,6 +28,7 @@ int main ( int argc, char *argv[] )
 
    Stars_Plaq square(4,2); //2D lattice with L linear dimension
    square.print();
+   square.prints();
 
    Error_Chain E(2*square.N_); //The error E
    E.initialize_random(0.2,345451);

@@ -156,6 +156,7 @@ int HyperCube::myPow (int x, int p) {
 //-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 //This is a DERIVED CLASS which contains the data structures specific for the Toric Code
+typedef boost::multi_array<int, 1> array_1t;
 typedef boost::multi_array<int, 2> array_2t;
 class Stars_Plaq : public HyperCube
 {
@@ -171,9 +172,13 @@ class Stars_Plaq : public HyperCube
         Stars_Plaq(int L, int D); //constructor
 
         //All of the 2-cells which are attached to a given 1-cell
-        vector<vector<int> > All_Neighbors; 
+        vector<vector<int> > TwosConnectedToOnes; 
         //The 1 cells connected to each 0 cell: for the gauge cluster flip
         array_2t OnesConnectedToZero;
+        //conversely, two zero-cells connected by each 1-cell (bond)
+        array_2t ZeroesConnectedToOnes;
+
+        void prints();
 
 
 };
@@ -230,10 +235,10 @@ Stars_Plaq::Stars_Plaq(int L, int D):HyperCube(L,D) {
     }
 
     //Now, make the data structure used to relate the DOF to the 4 plaquettes
-    All_Neighbors.resize(N1);
+    TwosConnectedToOnes.resize(N1);
     for (int i=0; i<Plaquette.size(); i++)
         for (int j=0; j<Plaquette[i].size(); j++)
-            All_Neighbors[Plaquette[i][j]].push_back(i);
+            TwosConnectedToOnes[Plaquette[i][j]].push_back(i);
 
     //The one cells connected to each zero-cell.  Used for cluster updates
 	OnesConnectedToZero.resize(boost::extents[N0][2*D_]); 
@@ -247,5 +252,37 @@ Stars_Plaq::Stars_Plaq(int L, int D):HyperCube(L,D) {
 
 	
 }; //constructor
+
+void Stars_Plaq::prints(){
+
+    cout<<L_<<" "<<D_<<" "<<N1<<" "<<N2<<endl;
+
+    cout<<"Plaquette \n";
+    for (int i=0; i<Plaquette.size(); i++){
+        PRINT_RED(i);
+        for (int j=0; j<4; j++)
+            //cout<<Plaquette[i][j]<<" ";
+            PRINT_RED(Plaquette[i][j]);
+        cout<<endl;
+    }//i
+
+    for (int i=0; i<TwosConnectedToOnes.size(); i++){
+        PRINT_GREEN(i);
+        for (int j=0; j<TwosConnectedToOnes[i].size(); j++)
+            //cout<<TwosConnectedToOnes[i][j]<<" ";
+            PRINT_GREEN(TwosConnectedToOnes[i][j]);
+        cout<<endl;
+    }
+
+    for (int i=0; i<OnesConnectedToZero.size(); i++){
+        PRINT_BLUE(i);
+        for (int j=0; j<OnesConnectedToZero[i].size(); j++){
+            cout<<OnesConnectedToZero[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+
+}//print
 
 #endif
