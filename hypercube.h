@@ -152,4 +152,100 @@ int HyperCube::myPow (int x, int p) {
   return i;
 }
 
+
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
+//This is a DERIVED CLASS which contains the data structures specific for the Toric Code
+typedef boost::multi_array<int, 2> array_2t;
+class Stars_Plaq : public HyperCube
+{
+    private:
+		//see generalD_1_2.code.h here:  https://github.com/rgmelko/Ising_Hypercube/tree/v1.0
+        vector<vector<int> > Plaquette;
+
+    public:
+	    int N0;   //number of zero cells
+        int N1;   //number of DEGREES OF FREEDOM
+        int N2;   //number of 2 cells
+
+        Stars_Plaq(int L, int D); //constructor
+
+        //All of the 2-cells which are attached to a given 1-cell
+        vector<vector<int> > All_Neighbors; 
+        //The 1 cells connected to each 0 cell: for the gauge cluster flip
+        array_2t OnesConnectedToZero;
+
+
+};
+
+Stars_Plaq::Stars_Plaq(int L, int D):HyperCube(L,D) {
+    
+	N0 = N_;  
+	N1 = D*N_;  
+	//cout<<N0<<" "<<N1<<endl;
+
+    //use it to built the sigma-z plaquettes
+    vector <int> temp;
+    temp.assign(4,0);  //assign 4 zeros to this vector
+
+    //ANN's IDEA JUST SO YOU KNOW
+    //Input: plaquette#
+    //Output: the 4 1-cells associated with that plaquette
+    for (int v=0; v<N0; v++ ){ //loop over 0-cells
+
+        for (int i=0; i<(D_-1); i++){ //loop that defines all 2-cells per vertex
+            for (int j=0; j<D_; j++){
+
+                if (i<j){  // cout<<i<<" "<<j<<endl;
+
+                    temp[0] = D_*v+i;
+                    temp[1] = D_*v+j;
+                    temp[2] = D_*Neighbors[v][i]+j;
+                    temp[3] = D_*Neighbors[v][j]+i;
+                    Plaquette.push_back(temp);
+
+                }//if
+
+            }//j
+        }//i
+
+    }//v
+
+    N2 = Plaquette.size(); //number of 2 cells
+	//cout<<N2<<endl;
+
+    //DEBUG: check if Plaquette has any errors
+    //vector<int> Check(Plaquette.size(),0);
+    vector<int> Check(N1,0);
+    //cout<<"Check size : "<<Check.size()<<endl;
+    for (int j=0; j<Plaquette.size(); j++)
+        for (int k=0; k<Plaquette[j].size(); k++)
+            Check[Plaquette[j][k]]++;
+
+    for (int j=0; j<Check.size(); j++){
+        if (Check[j] != 2*(D_-1)){ 
+            cout<<"Plaquette error \n";
+            cout<<j<<" "<<Check[j]<<endl;
+        }   
+    }
+
+    //Now, make the data structure used to relate the DOF to the 4 plaquettes
+    All_Neighbors.resize(N1);
+    for (int i=0; i<Plaquette.size(); i++)
+        for (int j=0; j<Plaquette[i].size(); j++)
+            All_Neighbors[Plaquette[i][j]].push_back(i);
+
+    //The one cells connected to each zero-cell.  Used for cluster updates
+	OnesConnectedToZero.resize(boost::extents[N0][2*D_]); 
+    int back_site;
+	for (int n=0; n<N0; n++)
+		for (int d=0; d<D_; d++){
+            OnesConnectedToZero[n][d] = D_*n + d;
+            back_site = Negatives[n][d];
+            OnesConnectedToZero[n][d+D_] = D_*back_site + d;
+        }
+
+	
+}; //constructor
+
 #endif
