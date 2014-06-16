@@ -250,6 +250,21 @@ Stars_Plaq::Stars_Plaq(int L, int D):HyperCube(L,D) {
             OnesConnectedToZero[n][d+D_] = D_*back_site + d;
         }
 
+    //TODO: DEBUG - only works for 2D
+    //The zero cells connected to each one-cell.  Used to define the syndrome
+    // - inverse of OnesConnectedToZero
+    if (D_ != 2)
+        PRINT_RED("WARNING - ZeroesConnectedToOnes works for 2D only");
+	ZeroesConnectedToOnes.resize(boost::extents[N1][2]);  //Two sites touch each bond
+    int site0; int site1;
+    for (int n=0; n<N1; n++){
+        site0 = n/D_;
+        ZeroesConnectedToOnes[n][0] = site0;
+        if (n%2 == 0) site1 = Neighbors[site0][0];
+        else site1 = Neighbors[site0][1];
+        ZeroesConnectedToOnes[n][1] = site1;
+    }//n
+
 	
 }; //constructor
 
@@ -278,6 +293,14 @@ void Stars_Plaq::prints(){
         PRINT_BLUE(i);
         for (int j=0; j<OnesConnectedToZero[i].size(); j++){
             cout<<OnesConnectedToZero[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    for (int i=0; i<ZeroesConnectedToOnes.size(); i++){
+        PRINT_YELLOW(i);
+        for (int j=0; j<ZeroesConnectedToOnes[i].size(); j++){
+            cout<<ZeroesConnectedToOnes[i][j]<<" ";
         }
         cout<<endl;
     }
