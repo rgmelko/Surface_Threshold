@@ -3,6 +3,11 @@
 
 // a class that contains the error chain
 
+#define PRINT_RED(x) std::cout << "\033[1;31m" << x << "\033[0m" << " "
+#define PRINT_BLUE(x) std::cout << "\033[1;34m" << x << "\033[0m" << " "
+#define PRINT_GREEN(x) std::cout << "\033[1;32m" << x << "\033[0m" << " "
+#define PRINT_YELLOW(x) std::cout << "\033[1;33m" << x << "\033[0m" << " "
+
 #include <vector>
 #include <iostream>
 
@@ -73,9 +78,15 @@ void Error_Chain::initialize_random(const double p, const int seed){
 //a print function
 void Error_Chain::print(){
 
-    cout<<error.size()<<endl;
-    for (int i=0;i<error.size();i++){
-        cout<<error[i]<<" ";
+    cout<<"Error: "<<error.size()<<endl;
+	for (int i=0;i<error.size();i++){
+		if (error[i] ==0)
+			cout<<"("<<i<<" "<<error[i]<<"), ";
+		else{
+			cout<<"("<<i<<" ";
+			PRINT_BLUE(error[i]);
+			cout<<"), ";
+		}
     }//i
     cout<<endl;
 

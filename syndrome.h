@@ -2,6 +2,10 @@
 #define SYNDROME_H 
 
 // a class that contains the syndrome
+#define PRINT_RED(x) std::cout << "\033[1;31m" << x << "\033[0m" << " "
+#define PRINT_BLUE(x) std::cout << "\033[1;34m" << x << "\033[0m" << " "
+#define PRINT_GREEN(x) std::cout << "\033[1;32m" << x << "\033[0m" << " "
+#define PRINT_YELLOW(x) std::cout << "\033[1;33m" << x << "\033[0m" << " "
 
 #include <vector>
 #include <iostream>
@@ -38,9 +42,16 @@ Syndrome::Syndrome(int N){
 //a print function
 void Syndrome::print(){
 
-    cout<<syndrome.size()<<endl;
-    for (int i=0;i<syndrome.size();i++){
-        cout<<syndrome[i]<<" ";
+	cout<<"Syndrome: "<<syndrome.size()<<endl;
+	for (int i=0;i<syndrome.size();i++){
+		if (syndrome[i] ==0)
+			cout<<"("<<i<<" "<<syndrome[i]<<"), ";
+		else{
+			cout<<"("<<i<<" ";
+			PRINT_RED(syndrome[i]);
+			cout<<"), ";
+		}
+        //cout<<"("<<i<<" "<<syndrome[i]<<"),";
     }//i
     cout<<endl;
 
