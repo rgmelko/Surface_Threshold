@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "error_chain.h"
+#include "hypercube.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ class Syndrome
         Syndrome(int N);
         void print();
 
-		void Find_Syndrome(const Error_Chain & E);
+		void Find_Syndrome(const Error_Chain & E, const Stars_Plaq & hcube);
 };
 
 //constructor 
@@ -46,9 +47,17 @@ void Syndrome::print(){
 }//print
 
 //This function takes an error configuration and find the Syndrome
-void Syndrome::Find_Syndrome(const Error_Chain & E){
+//TODO: Works for 2D only
+void Syndrome::Find_Syndrome(const Error_Chain & E, const Stars_Plaq & hcube){
 
-	syndrome[1] = 1;
+
+    for (int i=0;i<E.error.size();i++){
+        if (E.error[i] == 1) {
+            syndrome[hcube.ZeroesConnectedToOnes[i][0]] ^= 1;  //Toggle the bit
+            syndrome[hcube.ZeroesConnectedToOnes[i][1]] ^= 1;  //Toggle the bit
+        }
+    }//i
+
 
 }//Find_Syndrome
 

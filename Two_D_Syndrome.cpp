@@ -34,12 +34,12 @@ int main ( int argc, char *argv[] )
    E.initialize_random(0.2,345451);
    E.print();
 
-   Error_Chain Ep(2*square.N_); //The error E'
-   Ep.initialize_random(0.2,345400);
-   Ep.print();
+   //Error_Chain Ep(2*square.N_); //The error E'
+   //Ep.initialize_random(0.2,345400);
+   //Ep.print();
 
    Syndrome S(square.N_);
-   S.Find_Syndrome(E);
+   S.Find_Syndrome(E,square);
    S.print();
 
    return 0;
