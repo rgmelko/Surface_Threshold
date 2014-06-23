@@ -22,6 +22,9 @@ using namespace std;
 
 class Error_Chain
 {
+	private:
+		//void flip(const int & index);
+
     public:
         int N1; //total number of one-cells (edges)
 
@@ -33,6 +36,8 @@ class Error_Chain
         void resize(int N);
         void print();
         void initialize_random(const double p, const int seed);
+
+		void GaugeUpdateX(const Stars_Plaq & hcube);
 
 };
 
@@ -73,6 +78,16 @@ void Error_Chain::initialize_random(const double p, const int seed){
     }
 
 }//initialize_random;
+
+
+//This function modifies the error chain by performing an XXXX operation
+void Error_Chain::GaugeUpdateX(const Stars_Plaq & hcube){
+
+	for (int i=0; i<hcube.OnesConnectedToZero[0].size(); i++)
+		error[hcube.OnesConnectedToZero[0][i]] ^= 1;  //error flip
+
+
+}//GaugeUpdateX
 
 
 //a print function

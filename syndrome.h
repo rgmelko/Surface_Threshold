@@ -24,7 +24,8 @@ class Syndrome
 
         //public functions
         Syndrome(int N);
-        void print();
+        void print(); //print
+        void iprint(); //inverse print
 
 		void Find_Syndrome(const Error_Chain & E, const Stars_Plaq & hcube);
 };
@@ -56,6 +57,18 @@ void Syndrome::print(){
     cout<<endl;
 
 }//print
+
+
+//only print 1s
+void Syndrome::iprint(){
+
+	cout<<"iSyndrome: "<<syndrome.size()<<endl;
+	for (int i=0;i<syndrome.size();i++)
+		if (syndrome[i] ==1) cout<<i<<" ";
+    cout<<endl;
+
+}//iprint
+
 
 //This function takes an error configuration and find the Syndrome
 //TODO: Works for 2D only
