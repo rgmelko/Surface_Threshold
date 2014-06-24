@@ -38,6 +38,7 @@ class Error_Chain
         void initialize_random(const double p, const int seed);
 
 		void GaugeUpdateX(const Stars_Plaq & hcube);
+		void GaugeUpdateZ(const Stars_Plaq & hcube);
 
 };
 
@@ -80,11 +81,21 @@ void Error_Chain::initialize_random(const double p, const int seed){
 }//initialize_random;
 
 
-//This function modifies the error chain by performing an XXXX operation
+//This function modifies the error chain by performing an XXXX vertex operation
 void Error_Chain::GaugeUpdateX(const Stars_Plaq & hcube){
 
 	for (int i=0; i<hcube.OnesConnectedToZero[0].size(); i++)
-		error[hcube.OnesConnectedToZero[0][i]] ^= 1;  //error flip
+		error[hcube.OnesConnectedToZero[0][i]] ^= 1;  //XXXX error flip
+
+
+}//GaugeUpdateX
+
+
+//This function modifies the error chain by performing an ZZZZ plaquette operation
+void Error_Chain::GaugeUpdateZ(const Stars_Plaq & hcube){
+
+	for (int i=0; i<4; i++)  // Does a plaquette always have 4 DOFs?
+		error[hcube.Plaquette[0][i]] ^= 1;  //ZZZZ error flip
 
 
 }//GaugeUpdateX

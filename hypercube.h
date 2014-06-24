@@ -160,14 +160,13 @@ typedef boost::multi_array<int, 1> array_1t;
 typedef boost::multi_array<int, 2> array_2t;
 class Stars_Plaq : public HyperCube
 {
-    private:
-		//see generalD_1_2.code.h here:  https://github.com/rgmelko/Ising_Hypercube/tree/v1.0
-        vector<vector<int> > Plaquette;
-
     public:
 	    int N0;   //number of zero cells
         int N1;   //number of DEGREES OF FREEDOM
         int N2;   //number of 2 cells
+
+		//see generalD_1_2.code.h :  https://github.com/rgmelko/Ising_Hypercube/tree/v1.0
+        vector<vector<int> > Plaquette;
 
         Stars_Plaq(int L, int D); //constructor
 

@@ -40,12 +40,12 @@ int main ( int argc, char *argv[] )
 
    Syndrome S(square.N_);
    S.Find_Syndrome(E,square);
-   S.iprint();
+   S.print();
 
-   E.GaugeUpdateX(square);
+   E.GaugeUpdateZ(square);
    E.print();
    S.Find_Syndrome(E,square);
-   S.iprint();
+   S.print();
 
    return 0;
 }

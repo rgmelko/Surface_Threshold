@@ -74,6 +74,8 @@ void Syndrome::iprint(){
 //TODO: Works for 2D only
 void Syndrome::Find_Syndrome(const Error_Chain & E, const Stars_Plaq & hcube){
 
+    //reset the syndrome to all zeros
+    syndrome.assign(N0,0); 
 
     for (int i=0;i<E.error.size();i++){
         if (E.error[i] == 1) {
