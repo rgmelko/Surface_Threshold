@@ -26,12 +26,12 @@ int rnd_int(int a, int b)
 int main ( int argc, char *argv[] )
 {
 
-   Stars_Plaq square(4,2); //2D lattice with L linear dimension
+   Stars_Plaq square(6,2); //2D lattice with L linear dimension
    square.print();
    square.prints();
 
    Error_Chain E(2*square.N_); //The error E
-   E.initialize_random(0.2,345452);
+   E.initialize_random(0.11,345450);
    E.iprint();
 
    //Error_Chain Ep(2*square.N_); //The error E'
@@ -42,7 +42,8 @@ int main ( int argc, char *argv[] )
    S.Find_Syndrome(E,square);
    S.iprint();
 
-   E.GaugeUpdateZ(square,0);
+   //E.GaugeUpdateZ(square,0);
+   E.MetropolisUpdate(square);
    E.iprint();
    S.Find_Syndrome(E,square);
    S.iprint();
