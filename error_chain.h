@@ -13,7 +13,7 @@
 
 #include <boost/random.hpp>
 boost::random::mt19937 egen; //Global random number generator for this class
-double rnd_coin(){  //real # including 0 and excluding 1
+double rnd_real01(){  //real # including 0 and excluding 1
     boost::random::uniform_real_distribution <> coin(0, 1); 
     return coin(egen);
 }
@@ -35,10 +35,11 @@ class Error_Chain
         Error_Chain();
         void resize(int N);
         void print();
+        void iprint();
         void initialize_random(const double p, const int seed);
 
-		void GaugeUpdateX(const Stars_Plaq & hcube);
-		void GaugeUpdateZ(const Stars_Plaq & hcube);
+		void GaugeUpdateX(const Stars_Plaq & hcube, const int & link);
+		void GaugeUpdateZ(const Stars_Plaq & hcube, const int & link);
 
 };
 
@@ -75,27 +76,37 @@ void Error_Chain::initialize_random(const double p, const int seed){
     egen.seed(seed);
 
     for (int i = 0; i<error.size(); i++){
-        if (rnd_coin() < p) error[i] = 1;
+        if (rnd_real01() < p) error[i] = 1;
     }
 
 }//initialize_random;
 
 
 //This function modifies the error chain by performing an XXXX vertex operation
-void Error_Chain::GaugeUpdateX(const Stars_Plaq & hcube){
+void Error_Chain::GaugeUpdateX(const Stars_Plaq & hcube, const int & link){
 
-	for (int i=0; i<hcube.OnesConnectedToZero[0].size(); i++)
-		error[hcube.OnesConnectedToZero[0][i]] ^= 1;  //XXXX error flip
+	if (link >= N1){
+		PRINT_RED("GaugeUpdateX out of bounds");
+		return;
+	}
+
+	for (int i=0; i<hcube.OnesConnectedToZero[link].size(); i++)
+		error[hcube.OnesConnectedToZero[link][i]] ^= 1;  //XXXX error flip
 
 
 }//GaugeUpdateX
 
 
 //This function modifies the error chain by performing an ZZZZ plaquette operation
-void Error_Chain::GaugeUpdateZ(const Stars_Plaq & hcube){
+void Error_Chain::GaugeUpdateZ(const Stars_Plaq & hcube, const int & link){
+
+	if (link >= N1){
+		PRINT_RED("GaugeUpdateZ out of bounds");
+		return;
+	}
 
 	for (int i=0; i<4; i++)  // Does a plaquette always have 4 DOFs?
-		error[hcube.Plaquette[0][i]] ^= 1;  //ZZZZ error flip
+		error[hcube.Plaquette[link][i]] ^= 1;  //ZZZZ error flip
 
 
 }//GaugeUpdateX
@@ -117,5 +128,16 @@ void Error_Chain::print(){
     cout<<endl;
 
 }//print
+
+//an inverse print function
+void Error_Chain::iprint(){
+
+    cout<<"iError: "<<error.size()<<endl;
+	for (int i=0;i<error.size();i++)
+		if (error[i] == 1) cout<<i<<" ";
+    cout<<endl;
+
+}//iprint
+
 
 #endif
