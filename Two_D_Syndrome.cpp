@@ -27,22 +27,17 @@ int main ( int argc, char *argv[] )
 {
 
    Stars_Plaq square(6,2); //2D lattice with L linear dimension
-   square.print();
-   square.prints();
+   //square.print();
+   //square.prints();
 
    Error_Chain E(2*square.N_); //The error E
-   E.initialize_random(0.11,345450);
+   E.initialize_random(0.51,345450);
    E.iprint();
-
-   //Error_Chain Ep(2*square.N_); //The error E'
-   //Ep.initialize_random(0.2,345400);
-   //Ep.print();
 
    Syndrome S(square.N_);
    S.Find_Syndrome(E,square);
    S.iprint();
 
-   //E.GaugeUpdateZ(square,0);
    E.MetropolisUpdate(square);
    E.iprint();
    S.Find_Syndrome(E,square);

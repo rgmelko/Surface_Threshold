@@ -116,9 +116,9 @@ void Error_Chain::GaugeUpdateZ(const Stars_Plaq & hcube, const int & vertex){
 //thus retaining the same syndrome as the original E chain
 void Error_Chain::MetropolisUpdate(const Stars_Plaq & hcube){
 
-	int rplaq;
+	int rplaq; //random plaquette
 	int N_E; //number of errors on that plaquette
-	double Met_weight;
+	double Met_weight, rand_num;
 
 	for (int count=0; count<hcube.N2; count++){
 
@@ -135,12 +135,18 @@ void Error_Chain::MetropolisUpdate(const Stars_Plaq & hcube){
 		//PRINT_BLUE(Met_weight);
 
 		if (Met_weight < 1){ //need to do the metropolis test
-			if (Met_weight > rnd_real01() )//accept
+			rand_num = rnd_real01();
+			if (Met_weight > rand_num ){//accept
 				GaugeUpdateZ(hcube,rplaq);
+				cout<<rplaq<<" "<<Met_weight<<" "<<rand_num<<endl;
+			}
 			//else reject and do nothing
+			else cout<<rplaq<<" reject "<<Met_weight<<" "<<rand_num<<endl;
 		}
-		else //if the weight is greater than or equal to unity
+		else{ //if the weight is greater than or equal to unity
+			PRINT_BLUE(Met_weight);
 			GaugeUpdateZ(hcube,rplaq); //flip the plaquette
+		}
 
 	}//count
 	cout<<endl;
