@@ -45,17 +45,25 @@ int main ( int argc, char *argv[] )
 
    Measure estimators(0,param.MCS_);
 
-   for (int i=0; i<param.EQL_; i++)
-	   E.MetropolisUpdate(square);
 
-   for (int k=0; k<param.nBin_; k++){ 
+   //for (int k=0; k<param.nBin_; k++){  //loop over bins
+
+   double probP;
+   for (int p=0; p<100; p++){    //loop over P
+	   probP = (1.*p)/(100.);
+	   E.initialize_random(probP,param.SEED_);
+
+	   for (int i=0; i<param.EQL_; i++) //equilibrate
+		   E.MetropolisUpdate(square);
+
 	   estimators.zero();
 	   for (int i=0; i<param.MCS_; i++){ 
 		   E.MetropolisUpdate(square);
 		   estimators.Energy_0_Lby2_ZZZZ(E,square);
 	   }//i
-	   estimators.output();
-   }//k
+	   estimators.output(probP);
+
+   }//k or p
 
    S.Find_Syndrome(E,square);
    S.iprint();

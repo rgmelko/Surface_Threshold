@@ -5,6 +5,7 @@
 // modelled after https://github.com/rgmelko/Ising_Hypercube/releases
 
 #include <fstream>
+#include <iomanip>
 
 #include "error_chain.h"
 #include "hypercube.h"
@@ -23,7 +24,7 @@ class Measure
 
       Measure(const int & SimNum, const int & mcs);
       void zero();
-      void output();
+      void output(const double & P);
 
 	  //various measurement schemes
 	  void Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube);
@@ -79,14 +80,14 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
 }//update
 
 
-void Measure::output(){
+void Measure::output(const double & P){
 
     ofstream cfout;
     cfout.open(fname,ios::app); //fname created in constructor
 
-    int T=0;
-    cfout<<T<<" ";
-    cfout<<TOT_energy/(1.0*MCS)<<endl;
+    cfout<<P<<" ";
+    cfout<<setprecision(8)<<TOT_energy/(1.0*MCS)<<" ";
+	cfout<<endl;
 
     cfout.close();
 
