@@ -27,7 +27,7 @@ int rnd_int(int a, int b)
 int main ( int argc, char *argv[] )
 {
 
-   Stars_Plaq square(6,2); //2D lattice with L linear dimension
+   Stars_Plaq square(5,2); //2D lattice with L linear dimension
    //square.print();
    //square.prints();
 
@@ -46,6 +46,7 @@ int main ( int argc, char *argv[] )
 
    Measure estimators(0);
    estimators.zero();
+   estimators.Energy_0_Lby2_ZZZZ(E,square);
    estimators.output();
 
    return 0;
