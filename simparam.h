@@ -15,6 +15,7 @@ class PARAMS
         int MCS_;     //the number of Monte Carlo steps
         int nBin_;    //number of production bins
         long SEED_;   //the random number seed
+		double P_;    //the error chain probability
 
         PARAMS();
         void print();
@@ -32,21 +33,24 @@ PARAMS::PARAMS(){
     pfin >> MCS_;
     pfin >> nBin_;
     pfin >> SEED_;
+    pfin >> P_;
     pfin.close();
 
-	if (Dim_ != 2) cout<<"CHECK D>1 TODOS! /n";
+	if (Dim_ != 2) cout<<"CHECK D>2 TODOS! /n";
 
 }//constructor
 
 
 void PARAMS::print(){
 
-    cout<<"Linear size "<<nX_<<endl;
-    cout<<"Dimension "<<Dim_<<endl;
+    cout<<"# Linear size "<<nX_<<endl;
+    cout<<"# Dimension "<<Dim_<<endl;
     cout<<"# Equil steps "<<EQL_<<endl;
     cout<<"# MC steps "<<MCS_<<endl;
     cout<<"# data bins "<<nBin_<<endl;
-    cout<<"RNG seed "<<SEED_<<endl;
+    cout<<"# RNG seed "<<SEED_<<endl;
+    cout<<"# Error chain P "<<P_<<endl;
+	cout<<endl;
 
 }
 

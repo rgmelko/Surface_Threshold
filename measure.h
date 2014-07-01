@@ -21,7 +21,7 @@ class Measure
     public:
       double TOT_energy;   //energy
 
-      Measure(const int & SimNum);
+      Measure(const int & SimNum, const int & mcs);
       void zero();
       void output();
 
@@ -31,9 +31,9 @@ class Measure
 };
 
 //constructor
-Measure::Measure(const int & SimNum){
+Measure::Measure(const int & SimNum, const int & mcs){
 
-    //MCS = p.MCS_;
+    MCS = mcs; //# of Monte Carlo steps
 
     TOT_energy = 0.0;
 
@@ -68,7 +68,7 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
     //Now the (L/2,L/2) plaquette
 	int lx = hcube.L_/2; int ly = hcube.L_/2;
 	plaq = ly*hcube.L_ + lx;
-	cout<<"Plaq "<<plaq<<endl;
+	//cout<<"Plaq "<<plaq<<endl;
 
 	EL2 = 1;
 	for (int i=0; i<4; i++)  // see GaugeUpdateZ
@@ -86,8 +86,7 @@ void Measure::output(){
 
     int T=0;
     cfout<<T<<" ";
-    //cfout<<TOT_energy/(1.0*MCS * Nspin)<<" ";
-    cfout<<TOT_energy<<endl;
+    cfout<<TOT_energy/(1.0*MCS)<<endl;
 
     cfout.close();
 

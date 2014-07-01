@@ -138,18 +138,18 @@ void Error_Chain::MetropolisUpdate(const Stars_Plaq & hcube){
 			rand_num = rnd_real01();
 			if (Met_weight > rand_num ){//accept
 				GaugeUpdateZ(hcube,rplaq);
-				cout<<rplaq<<" "<<Met_weight<<" "<<rand_num<<endl;
+				//cout<<rplaq<<" "<<Met_weight<<" "<<rand_num<<endl;
 			}
 			//else reject and do nothing
-			else cout<<rplaq<<" reject "<<Met_weight<<" "<<rand_num<<endl;
+			//else cout<<rplaq<<" reject "<<Met_weight<<" "<<rand_num<<endl;
 		}
 		else{ //if the weight is greater than or equal to unity
-			PRINT_BLUE(Met_weight);
+			//PRINT_BLUE(Met_weight);
 			GaugeUpdateZ(hcube,rplaq); //flip the plaquette
 		}
 
 	}//count
-	cout<<endl;
+	//cout<<endl;
 
 }//------------------------------------------------------------------MetropolisUpdate
 
