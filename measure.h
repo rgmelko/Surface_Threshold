@@ -21,6 +21,7 @@ class Measure
 
     public:
       double TOT_energy;   //energy
+      double TOT_energy2;   //energy^2?
 
       Measure(const int & SimNum, const int & mcs);
       void zero();
@@ -37,6 +38,7 @@ Measure::Measure(const int & SimNum, const int & mcs){
     MCS = mcs; //# of Monte Carlo steps
 
     TOT_energy = 0.0;
+    TOT_energy2 = 0.0;
 
     createName(fname, SimNum); //create the first two characters of the file name
     fname[2] = '.';
@@ -51,6 +53,7 @@ Measure::Measure(const int & SimNum, const int & mcs){
 void Measure::zero(){
 
     TOT_energy = 0.0;
+    TOT_energy2 = 0.0;
 
 }
 
@@ -76,6 +79,7 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
 		EL2 *= 2*(E.error[hcube.Plaquette[plaq][i]]) - 1; //modify to +1 and -1  
 
     TOT_energy += E0 * EL2;
+    TOT_energy2 += (E0 * EL2)*(E0 * EL2);
 
 }//update
 
@@ -87,6 +91,7 @@ void Measure::output(const double & P){
 
     cfout<<P<<" ";
     cfout<<setprecision(8)<<TOT_energy/(1.0*MCS)<<" ";
+    cfout<<setprecision(8)<<TOT_energy2/(1.0*MCS)<<" ";
 	cfout<<endl;
 
     cfout.close();
