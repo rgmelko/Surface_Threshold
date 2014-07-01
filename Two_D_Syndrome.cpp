@@ -17,6 +17,7 @@ int rnd_int(int a, int b)
   return dist(gen); }
 //-----------------------------------
 
+#include "simparam.h"
 #include "hypercube.h"
 #include "syndrome.h"
 #include "error_chain.h"
@@ -27,7 +28,9 @@ int rnd_int(int a, int b)
 int main ( int argc, char *argv[] )
 {
 
-   Stars_Plaq square(5,2); //2D lattice with L linear dimension
+   PARAMS param; //read in parameter file
+
+   Stars_Plaq square(param.nX_,param.Dim_); //2D lattice with L linear dimension
    //square.print();
    //square.prints();
 
