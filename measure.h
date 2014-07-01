@@ -29,6 +29,7 @@ class Measure
 
 	  //various measurement schemes
 	  void Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube);
+	  void Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube);
  
 };
 
@@ -59,7 +60,7 @@ void Measure::zero(){
 
 
 //Let's measure a simple energy correlation function between the (0,0) plaquette
-//and the (L/2,L/2) plaquette
+//and the (L/2,L/2) plaquette: TODO: 2D only here
 void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube){
 
 	double E0, EL2;
@@ -79,7 +80,31 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
 		EL2 *= 2*(E.error[hcube.Plaquette[plaq][i]]) - 1; //modify to +1 and -1  
 
     TOT_energy += E0 * EL2;
-    TOT_energy2 += (E0 * EL2)*(E0 * EL2);
+
+}//update
+
+
+//Let's measure a simple energy correlation function between the (0,0) plaquette
+//and the (L/2,L/2) plaquette: TODO: 2D only here
+void Measure::Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube){
+
+	double E0, EL2;
+
+	int vertex = 0; //the zeroth plaquette to start
+	E0 = 1;
+	for (int i=0; i<hcube.OnesConnectedToZero[vertex].size(); i++)  //see GaugeUpdateX update
+		E0 *= 2*(E.error[hcube.OnesConnectedToZero[vertex][i]]) - 1;  
+
+    //Now the (L/2,L/2) plaquette
+	int lx = hcube.L_/2; int ly = hcube.L_/2;
+	vertex = ly*hcube.L_ + lx;
+	//cout<<"Plaq "<<plaq<<endl;
+
+	EL2 = 1;
+	for (int i=0; i<hcube.OnesConnectedToZero[vertex].size(); i++)  //see GaugeUpdateX update
+		EL2 *= 2*(E.error[hcube.OnesConnectedToZero[vertex][i]]) - 1;  
+
+    TOT_energy2 += E0 * EL2;
 
 }//update
 
@@ -90,8 +115,8 @@ void Measure::output(const double & P){
     cfout.open(fname,ios::app); //fname created in constructor
 
     cfout<<P<<" ";
-    cfout<<setprecision(8)<<TOT_energy/(1.0*MCS)<<" ";
-    cfout<<setprecision(8)<<TOT_energy2/(1.0*MCS)<<" ";
+    cfout<<setprecision(8)<<TOT_energy*TOT_energy/(1.0*MCS*MCS)<<" ";
+    cfout<<setprecision(8)<<TOT_energy2*TOT_energy2/(1.0*MCS*MCS)<<" ";
 	cfout<<endl;
 
     cfout.close();

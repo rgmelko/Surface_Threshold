@@ -108,7 +108,7 @@ void Error_Chain::GaugeUpdateZ(const Stars_Plaq & hcube, const int & vertex){
 		error[hcube.Plaquette[vertex][i]] ^= 1;  //ZZZZ error flip
 
 
-}//GaugeUpdateX
+}//GaugeUpdateZ
 
 
 //----------------------------------------------------------------------------------

@@ -58,6 +58,7 @@ int main ( int argc, char *argv[] )
 	   for (int i=0; i<param.MCS_; i++){ 
 		   E.MetropolisUpdate(square);
 		   estimators.Energy_0_Lby2_ZZZZ(E,square);
+		   estimators.Energy_0_Lby2_XXXX(E,square);
 	   }//i
 	   estimators.output(probP);
 	   S.Find_Syndrome(E,square);
