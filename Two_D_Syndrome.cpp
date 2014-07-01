@@ -20,6 +20,7 @@ int rnd_int(int a, int b)
 #include "hypercube.h"
 #include "syndrome.h"
 #include "error_chain.h"
+#include "measure.h"
 
 
 //----main
@@ -42,6 +43,10 @@ int main ( int argc, char *argv[] )
    E.iprint();
    S.Find_Syndrome(E,square);
    S.iprint();
+
+   Measure estimators(0);
+   estimators.zero();
+   estimators.output();
 
    return 0;
 }
