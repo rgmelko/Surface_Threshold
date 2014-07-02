@@ -21,16 +21,20 @@ class Measure
 
     public:
       double TOT_energy;   //energy
-      double TOT_energy2;   //energy^2?
+      double TOT_energy2;   //energy^2?		
+      double Z_energy_0;
+      double Z_energy_L2;
+      double Z_energy_corr;
 
       Measure(const int & SimNum, const int & mcs);
       void zero();
       void output(const double & P);
 
 	  //various measurement schemes
-	  void Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube);
-	  void Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube);
+	  void Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube); //first energy attempt
+	  void Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube); 
  
+	  void Energy_0_Lby2_ZConnect(const Error_Chain & E, const Stars_Plaq & hcube); //second energy attempt
 };
 
 //constructor
@@ -40,6 +44,10 @@ Measure::Measure(const int & SimNum, const int & mcs){
 
     TOT_energy = 0.0;
     TOT_energy2 = 0.0;
+
+	Z_energy_0 = 0.;
+	Z_energy_L2 = 0.;
+	Z_energy_corr = 0.;
 
     createName(fname, SimNum); //create the first two characters of the file name
     fname[2] = '.';
@@ -56,7 +64,35 @@ void Measure::zero(){
     TOT_energy = 0.0;
     TOT_energy2 = 0.0;
 
+    Z_energy_0 = 0.;
+	Z_energy_L2 = 0.;
+	Z_energy_corr = 0.;
 }
+
+
+//Another definition of an energy correlator : TODO: 2D only here
+void Measure::Energy_0_Lby2_ZConnect(const Error_Chain & E, const Stars_Plaq & hcube){
+
+	double E0, EL2;
+
+	int plaq = 0; //the zeroth plaquette to start
+    E0 = 0;
+    for (int i=0; i<4; i++)  // see GaugeUpdateZ
+        E0 += E.error[hcube.Plaquette[plaq][i]]; //0 and 1
+
+    //Now the (L/2,L/2) plaquette
+	int lx = hcube.L_/2; int ly = hcube.L_/2;
+	plaq = ly*hcube.L_ + lx;
+
+	EL2 = 0;
+	for (int i=0; i<4; i++)  // see GaugeUpdateZ
+		EL2 += E.error[hcube.Plaquette[plaq][i]]; //0 and 1
+
+    Z_energy_0 += E0;        // <E(0,0)>
+    Z_energy_L2 += EL2;      // <E(L/2,L/2)>
+	Z_energy_corr += E0*EL2; // <E(0,0)*E(L/2,L/2)>
+	
+}//Energy_0_Lby2_ZConnect
 
 
 //Let's measure a simple energy correlation function between the (0,0) plaquette
@@ -79,7 +115,7 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
 	for (int i=0; i<4; i++)  // see GaugeUpdateZ
 		EL2 *= 2*(E.error[hcube.Plaquette[plaq][i]]) - 1; //modify to +1 and -1  
 
-    TOT_energy += E0 * EL2;
+    TOT_energy += E0*EL2;
 
 }//update
 
@@ -104,7 +140,7 @@ void Measure::Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube
 	for (int i=0; i<hcube.OnesConnectedToZero[vertex].size(); i++)  //see GaugeUpdateX update
 		EL2 *= 2*(E.error[hcube.OnesConnectedToZero[vertex][i]]) - 1;  
 
-    TOT_energy2 += E0 * EL2;
+    TOT_energy2 += E0*EL2;
 
 }//update
 
@@ -114,9 +150,15 @@ void Measure::output(const double & P){
     ofstream cfout;
     cfout.open(fname,ios::app); //fname created in constructor
 
+	double mcs = 1.0*MCS;
+
     cfout<<P<<" ";
-    cfout<<setprecision(8)<<TOT_energy*TOT_energy/(1.0*MCS*MCS)<<" ";
-    cfout<<setprecision(8)<<TOT_energy2*TOT_energy2/(1.0*MCS*MCS)<<" ";
+    cfout<<setprecision(8)<<TOT_energy*TOT_energy/(mcs*mcs)<<" ";
+    cfout<<setprecision(8)<<TOT_energy2*TOT_energy2/(mcs*mcs)<<" ";
+    cfout<<setprecision(8)<<Z_energy_corr/mcs<<" "; 
+    cfout<<setprecision(8)<<Z_energy_0/mcs<<" ";
+    cfout<<setprecision(8)<<Z_energy_L2/mcs<<" ";
+    cfout<<setprecision(8)<<Z_energy_corr/mcs - Z_energy_0*Z_energy_L2/(mcs*mcs)<<" ";
 	cfout<<endl;
 
     cfout.close();

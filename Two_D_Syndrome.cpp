@@ -59,6 +59,7 @@ int main ( int argc, char *argv[] )
 		   E.MetropolisUpdate(square);
 		   estimators.Energy_0_Lby2_ZZZZ(E,square);
 		   estimators.Energy_0_Lby2_XXXX(E,square);
+		   estimators.Energy_0_Lby2_ZConnect(E,square);
 	   }//i
 	   estimators.output(probP);
 	   S.Find_Syndrome(E,square);
