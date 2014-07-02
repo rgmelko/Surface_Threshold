@@ -84,6 +84,7 @@ void Error_Chain::initialize_random(const double p, const int seed){
 
     for (int i = 0; i<error.size(); i++){
         if (rnd_real01() < p) error[i] = 1;
+		else error[i] = 0;
     }
 
 	W_E = p/(1.0-p);  //This is the weight for a single error of probability p
