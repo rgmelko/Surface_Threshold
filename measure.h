@@ -6,11 +6,13 @@
 
 #include <fstream>
 #include <iomanip>
+//#include <vector>
 
 #include "error_chain.h"
 #include "hypercube.h"
 
-typedef boost::multi_array<int, 2> array_2t;
+//typedef boost::multi_array<int, 1> array_1t;
+//typedef boost::multi_array<int, 2> array_2t;
 
 class Measure
 {
@@ -19,13 +21,19 @@ class Measure
        char fname[8]; //we do it so that every object has its own filename
        void createName(char *name, const int &);
 
-    public:
       double TOT_E0;      //energy
       double TOT_energy;   
       double TOT_energy2;   
       double Z_energy_0;
       double Z_energy_L2;
       double Z_energy_corr;
+
+	  //specific heat measurements
+      double SpecificHeat;
+      double Cv_E0E0;
+      double Cv_E0;
+
+    public:
 
       Measure(const int & SimNum, const int & mcs);
       void zero();
@@ -51,6 +59,10 @@ Measure::Measure(const int & SimNum, const int & mcs){
 	Z_energy_L2 = 0.;
 	Z_energy_corr = 0.;
 
+    SpecificHeat = 0.;
+    Cv_E0E0 = 0.;
+    Cv_E0 = 0.;
+
     createName(fname, SimNum); //create the first two characters of the file name
     fname[2] = '.';
     fname[3] = 'd';
@@ -70,6 +82,9 @@ void Measure::zero(){
     Z_energy_0 = 0.;
 	Z_energy_L2 = 0.;
 	Z_energy_corr = 0.;
+	SpecificHeat = 0.;
+	Cv_E0E0 = 0.;
+	Cv_E0 = 0.;
 }
 
 
@@ -94,7 +109,8 @@ void Measure::Energy_0_Lby2_ZConnect(const Error_Chain & E, const Stars_Plaq & h
     Z_energy_0 += E0;        // <E(0,0)>
     Z_energy_L2 += EL2;      // <E(L/2,L/2)>
 	Z_energy_corr += E0*EL2; // <E(0,0)*E(L/2,L/2)>
-	
+	SpecificHeat += E0*E0;   // <E(0,0)*E(0,0)>
+
 }//Energy_0_Lby2_ZConnect
 
 
@@ -164,6 +180,7 @@ void Measure::output(const double & P){
     cfout<<setprecision(8)<<Z_energy_0/mcs<<" ";
     cfout<<setprecision(8)<<Z_energy_L2/mcs<<" ";
     cfout<<setprecision(8)<<Z_energy_corr/mcs - Z_energy_0*Z_energy_L2/(mcs*mcs)<<" ";
+    cfout<<setprecision(8)<<SpecificHeat/mcs - Z_energy_0*Z_energy_0/(mcs*mcs)<<" ";
 	cfout<<endl;
 
     cfout.close();
