@@ -20,8 +20,9 @@ class Measure
        void createName(char *name, const int &);
 
     public:
-      double TOT_energy;   //energy
-      double TOT_energy2;   //energy^2?		
+      double TOT_E0;      //energy
+      double TOT_energy;   
+      double TOT_energy2;   
       double Z_energy_0;
       double Z_energy_L2;
       double Z_energy_corr;
@@ -42,6 +43,7 @@ Measure::Measure(const int & SimNum, const int & mcs){
 
     MCS = mcs; //# of Monte Carlo steps
 
+    TOT_E0= 0.0;
     TOT_energy = 0.0;
     TOT_energy2 = 0.0;
 
@@ -61,6 +63,7 @@ Measure::Measure(const int & SimNum, const int & mcs){
 //zero
 void Measure::zero(){
 
+    TOT_E0= 0.0;
     TOT_energy = 0.0;
     TOT_energy2 = 0.0;
 
@@ -115,6 +118,7 @@ void Measure::Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube
 	for (int i=0; i<4; i++)  // see GaugeUpdateZ
 		EL2 *= 2*(E.error[hcube.Plaquette[plaq][i]]) - 1; //modify to +1 and -1  
 
+    TOT_E0+= E0;
     TOT_energy += E0*EL2;
 
 }//update
@@ -153,6 +157,7 @@ void Measure::output(const double & P){
 	double mcs = 1.0*MCS;
 
     cfout<<P<<" ";
+    cfout<<setprecision(8)<<TOT_E0/(mcs)<<" ";
     cfout<<setprecision(8)<<TOT_energy*TOT_energy/(mcs*mcs)<<" ";
     cfout<<setprecision(8)<<TOT_energy2*TOT_energy2/(mcs*mcs)<<" ";
     cfout<<setprecision(8)<<Z_energy_corr/mcs<<" "; 
