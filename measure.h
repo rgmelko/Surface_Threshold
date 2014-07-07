@@ -21,6 +21,9 @@ class Measure
        char fname[8]; //we do it so that every object has its own filename
        void createName(char *name, const int &);
 
+      double g_TOT_E; //global total energies
+      double g_TOT_E2;
+
       double TOT_E0;      //energy
       double TOT_energy;   
       double TOT_energy2;   
@@ -37,7 +40,8 @@ class Measure
 
       Measure(const int & SimNum, const int & mcs);
       void zero();
-      void output(const double & P);
+      void record(double & energy);
+      void output(const double & P, const Stars_Plaq & hcube);
 
 	  //various measurement schemes
 	  void Energy_0_Lby2_ZZZZ(const Error_Chain & E, const Stars_Plaq & hcube); //first energy attempt
@@ -50,6 +54,9 @@ class Measure
 Measure::Measure(const int & SimNum, const int & mcs){
 
     MCS = mcs; //# of Monte Carlo steps
+
+    g_TOT_E= 0.0;
+    g_TOT_E2= 0.0;
 
     TOT_E0= 0.0;
     TOT_energy = 0.0;
@@ -75,6 +82,9 @@ Measure::Measure(const int & SimNum, const int & mcs){
 //zero
 void Measure::zero(){
 
+    g_TOT_E= 0.0;
+    g_TOT_E2= 0.0;
+
     TOT_E0= 0.0;
     TOT_energy = 0.0;
     TOT_energy2 = 0.0;
@@ -86,6 +96,15 @@ void Measure::zero(){
 	Cv_E0E0 = 0.;
 	Cv_E0 = 0.;
 }
+
+
+//The below measures the global energy and specific heat
+void Measure::record(double & energy){
+
+    g_TOT_E += energy;
+    g_TOT_E2 += energy*energy;
+
+}//record
 
 
 //Another definition of an energy correlator : TODO: 2D only here
@@ -165,7 +184,7 @@ void Measure::Energy_0_Lby2_XXXX(const Error_Chain & E, const Stars_Plaq & hcube
 }//update
 
 
-void Measure::output(const double & P){
+void Measure::output(const double & P, const Stars_Plaq & hcube){
 
     ofstream cfout;
     cfout.open(fname,ios::app); //fname created in constructor
@@ -173,6 +192,8 @@ void Measure::output(const double & P){
 	double mcs = 1.0*MCS;
 
     cfout<<P<<" ";
+    cfout<<setprecision(8)<<g_TOT_E/(mcs*hcube.N1)<<" "; //global energy per plaquette
+    cfout<<setprecision(8)<<(g_TOT_E2/mcs - g_TOT_E*g_TOT_E/(mcs*mcs))/hcube.N1<<" "; //specific heat per plaquette
     cfout<<setprecision(8)<<TOT_E0/(mcs)<<" ";
     cfout<<setprecision(8)<<TOT_energy*TOT_energy/(mcs*mcs)<<" ";
     cfout<<setprecision(8)<<TOT_energy2*TOT_energy2/(mcs*mcs)<<" ";

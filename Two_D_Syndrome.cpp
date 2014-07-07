@@ -47,26 +47,26 @@ int main ( int argc, char *argv[] )
    double probP;
    for (int p=0; p<=50; p++){    //loop over P
 	   probP = (1.*p)/(50.);
-	   cout<<probP<<" ";
+	   //cout<<probP<<" ";
 	   E.initialize_random(probP,param.SEED_);
-	   E.calc_energy(square);
-	   //S.Find_Syndrome(E,square);
-	   //S.iprint();
+	   S.Find_Syndrome(E,square);
+	   S.iprint();
 
-	   //for (int i=0; i<param.EQL_; i++) //equilibrate
+	   for (int i=0; i<param.EQL_; i++) //equilibrate
 	       E.MetropolisUpdate(square);
-		   E.calc_energy(square);
+		   //E.calc_energy();
 
-	   //estimators.zero();
-	   //for (int i=0; i<param.MCS_; i++){ 
-	   //    E.MetropolisUpdate(square);
-	   //    estimators.Energy_0_Lby2_ZZZZ(E,square);
-	   //    estimators.Energy_0_Lby2_XXXX(E,square);
-	   //    estimators.Energy_0_Lby2_ZConnect(E,square);
-	   //}//i
-	   //estimators.output(probP);
-	   //S.Find_Syndrome(E,square);
-	   //S.iprint();
+	   estimators.zero();
+	   for (int i=0; i<param.MCS_; i++){ 
+	       E.MetropolisUpdate(square);
+		   estimators.record(E.gEnergy);
+	       estimators.Energy_0_Lby2_ZZZZ(E,square);
+	       estimators.Energy_0_Lby2_XXXX(E,square);
+	       estimators.Energy_0_Lby2_ZConnect(E,square);
+	   }//i
+	   estimators.output(probP, square);
+	   S.Find_Syndrome(E,square);
+	   S.iprint();
 
    }//k or p
 
