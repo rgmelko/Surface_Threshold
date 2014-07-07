@@ -11,6 +11,8 @@
 #include <vector>
 #include <iostream>
 
+#include "hypercube.h"
+
 #include <boost/random.hpp>
 boost::random::mt19937 egen; //Global random number generator for this class
 double rnd_real01(){  //real # including 0 and excluding 1
@@ -35,6 +37,8 @@ class Error_Chain
 
         vector<int> error;
 
+		double Energy;
+
         //public functions
         Error_Chain(int N);
         Error_Chain();
@@ -42,6 +46,7 @@ class Error_Chain
         void print();
         void iprint();
         void initialize_random(const double p, const int seed);
+		void calc_energy(const Stars_Plaq & hcube);
 
 		void GaugeUpdateX(const Stars_Plaq & hcube, const int & );
 		void GaugeUpdateZ(const Stars_Plaq & hcube, const int & );
@@ -54,6 +59,7 @@ class Error_Chain
 Error_Chain::Error_Chain(){
 
     error.clear(); 
+	Energy = 0.;
 
 }
 
@@ -64,6 +70,7 @@ Error_Chain::Error_Chain(int N){
     N1 = N;
 
     error.resize(N1,0); //assign every error as 0
+	Energy = 0;
 
 }
 
@@ -73,6 +80,7 @@ void Error_Chain::resize(int N){
     N1 = N;
 
     error.resize(N1,0); //assign every error as 0
+	Energy = 0.;
 
 }
 
@@ -89,7 +97,31 @@ void Error_Chain::initialize_random(const double p, const int seed){
 
 	W_E = p/(1.0-p);  //This is the weight for a single error of probability p
 
+
 }//initialize_random;
+
+
+//Here, the energy is defined as the metropolis energy; the sum of errors on each plaquette
+void Error_Chain::calc_energy(const Stars_Plaq & hcube){
+
+	Energy = 0.;
+	//if energy is the sum of errors on every plaquette:
+	//double E0; 
+	//for (int plaq = 0; plaq< hcube.N2; plaq++){
+	//	E0 = 0;
+	//	for (int i=0; i<4; i++)  // see GaugeUpdateZ
+	//		E0 += error[hcube.Plaquette[plaq][i]]; //0 and 1
+	//	Energy += E0;
+	//}//plaq
+
+    //if energy is the totaly number of errors
+    for (int i = 0; i<error.size(); i++){
+		Energy += error[i];
+    }
+
+	cout<<"energy : "<<Energy<<endl;
+
+}//calc_energy
 
 
 //This function modifies the error chain by performing an XXXX vertex operation
@@ -140,6 +172,7 @@ void Error_Chain::MetropolisUpdate(const Stars_Plaq & hcube){
 			if (Met_weight > rand_num ){//accept
 				GaugeUpdateZ(hcube,rplaq);
 				//cout<<rplaq<<" "<<Met_weight<<" "<<rand_num<<endl;
+				Energy += 4.0 - 2.0*N_E;
 			}
 			//else reject and do nothing
 			//else cout<<rplaq<<" reject "<<Met_weight<<" "<<rand_num<<endl;
@@ -147,10 +180,12 @@ void Error_Chain::MetropolisUpdate(const Stars_Plaq & hcube){
 		else{ //if the weight is greater than or equal to unity
 			//PRINT_BLUE(Met_weight);
 			GaugeUpdateZ(hcube,rplaq); //flip the plaquette
+			Energy += 4.0 - 2.0*N_E;
 		}
 
 	}//count
-	//cout<<endl;
+	
+	cout<<"metrop : "<<Energy<<endl;
 
 }//------------------------------------------------------------------MetropolisUpdate
 
